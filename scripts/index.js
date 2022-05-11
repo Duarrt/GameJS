@@ -1,6 +1,9 @@
-const canvas = document.querySelector('canvas');
-const button = document.querySelector('input');
-const c = canvas.getContext('2d');
+const canvas = document.getElementById('canvas');
+const context = canvas.getContext('2d');
+
+const fps = 30;
+
+setInterval(animate, 1000 / fps);
 
 canvas.width = innerWidth
 canvas.height = innerHeight
@@ -12,25 +15,26 @@ class Sprite {
     }
 
     drawSpritePlayer() {
-        c.fillStyle = 'blue';
-        c.fillRect(this.position.x, this.position.y, 30, 50);
+        context.fillStyle = 'blue';
+        context.fillRect(this.position.x, this.position.y, 30, 50);
     }
 
     updatePlayer() {
         this.drawSpritePlayer();
-        this.position.x += 5;
+        
+        // this.position.x += 5;
         
     }
 
     drawSpriteEnemy() {
-        c.fillStyle = 'red';
-        c.fillRect(this.position.x, this.position.y, 30, 80);
+        context.fillStyle = 'red';
+        context.fillRect(this.position.x, this.position.y, 30, 80);
     }
 
     updateEnemy() {
         this.drawSpriteEnemy();
-        this.position.x -= 5;
-        this.velocity.y -= 10;
+        this.position.x -= 1;
+        this.velocity.x -= 0;
     }
 }
 const player = new Sprite({
@@ -55,24 +59,16 @@ const enemy = new Sprite({
     }
  });
 
-console.log(player);
-
 function animate(){
     window.requestAnimationFrame(animate);
     player.updatePlayer();
     enemy.updateEnemy();
-
-    if((enemy.position.x == player.position.x) && (enemy.position.y == player.position.y)){
+    
+    if((enemy.position == player.position) || (enemy.position.y == player.position.y)){
         console.log("PERDEU");
     }
-    
+
 }
 
-function play() {
-    if (button.value == 'Jogar!') {
-        animate();
-        button.value = 'Parar!';
-    } else {
-        button.value = 'Jogar!';
-    }
-}   
+animate();
+ 
