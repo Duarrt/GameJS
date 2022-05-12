@@ -21,12 +21,12 @@ var score = 0;
 
 var bX = 10;
 var bY = 100;
-var gravity = 1.5;
+var gravity = 1.4;
 
 var obs = [];
 obs[0]={
     x: canvas.width,
-    y: 0
+    y: Math.floor(Math.random() * obstacleTop.height) - obstacleTop.height
 };
 
 //moving up the bird
@@ -60,10 +60,12 @@ function drawSprites() {
                 context.drawImage(bird, bX, 375);
             }
             
-            if(!alert("Pontuação: " + score + "\nClique para jogar novamente.")){
-                obs.length = 0;
-                window.location.reload();
-            };
+            // if(!alert("Pontuação: " + score + "\nClique para jogar novamente.")){
+            //     obs.length = 0;
+            //     window.location.reload();
+            // };
+            obs.length = 0;
+            window.location.reload();
         }
 
         if(obs[i].x == 5){
@@ -76,10 +78,12 @@ function drawSprites() {
     context.drawImage(bird, bX, bY);
     bY += gravity;
     
-    context.fillStyle
+    context.fillStyle;
     context.font = "20px Verdana";
     context.fillText("Pontuação: " + score, 10, canvas.height-20);
 
+    context.font = "10px Verdana";
+    context.fillText("Desenvolvido por RRibeiro", 10, canvas.height-5);
     requestAnimationFrame(drawSprites);
 }
 
