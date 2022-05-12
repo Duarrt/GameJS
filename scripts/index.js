@@ -60,12 +60,12 @@ function drawSprites() {
                 context.drawImage(bird, bX, 375);
             }
             
-            // if(!alert("Pontuação: " + score + "\nClique para jogar novamente.")){
-            //     obs.length = 0;
-            //     window.location.reload();
-            // };
-            obs.length = 0;
-            window.location.reload();
+            if(!alert("Pontuação: " + score + "\nClique para jogar novamente.")){
+                obs.length = 0;
+                window.location.reload();
+            };
+            // obs.length = 0;
+            // window.location.reload();
         }
 
         if(obs[i].x == 5){
