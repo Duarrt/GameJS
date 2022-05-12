@@ -1,74 +1,86 @@
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
 
-const fps = 30;
+//setting up images
+var background = new Image();
+var bird = new Image();
+var obstacleTop = new Image();
+var obstacleBottom = new Image();
+var ground = new Image();
 
-setInterval(animate, 1000 / fps);
+background.src="styles/images/background.jpg";
+bird.src="styles/images/bird.png";
+obstacleTop.src="styles/images/obsTop.png";
+obstacleBottom.src="styles/images/obsBottom.png";
+ground.src="styles/images/ground.png";
 
-canvas.width = innerWidth
-canvas.height = innerHeight
+//variables
+var gap = 105;
+var spaceBetween = obstacleTop.height + gap;
+var score = 0;
 
-class Sprite {
-    constructor({position, velocity}) {
-        this.position = position;
-        this.velocity = velocity;
-    }
+var bX = 10;
+var bY = 100;
+var gravity = 1.5;
 
-    drawSpritePlayer() {
-        context.fillStyle = 'blue';
-        context.fillRect(this.position.x, this.position.y, 30, 50);
-    }
+var obs = [];
+obs[0]={
+    x: canvas.width,
+    y: 0
+};
 
-    updatePlayer() {
-        this.drawSpritePlayer();
-        
-        // this.position.x += 5;
-        
-    }
+//moving up the bird
+document.addEventListener("click", move);
+document.addEventListener("keydown", move);
 
-    drawSpriteEnemy() {
-        context.fillStyle = 'red';
-        context.fillRect(this.position.x, this.position.y, 30, 80);
-    }
-
-    updateEnemy() {
-        this.drawSpriteEnemy();
-        this.position.x -= 1;
-        this.velocity.x -= 0;
-    }
+function move(){
+    bY -= 38;
 }
-const player = new Sprite({
-   position: {
-    x: 100,
-    y: 200
-   },
-   velocity: {
-       x: 0,
-       y: 0
-   }
-});
 
-const enemy = new Sprite({
-    position: {
-     x: innerWidth,
-     y: Math.random() * (0, 500)
-    },
-    velocity: {
-        x: 0,
-        y: 0
-    }
- });
-
-function animate(){
-    window.requestAnimationFrame(animate);
-    player.updatePlayer();
-    enemy.updateEnemy();
+//drawing the objects sprites
+function drawSprites() {
+    context.drawImage(background, 0, 0);
     
-    if((enemy.position == player.position) || (enemy.position.y == player.position.y)){
-        console.log("PERDEU");
-    }
+    for(var i = 0; i < obs.length; i++) {
+        context.drawImage(obstacleTop, obs[i].x, obs[i].y);
+        context.drawImage(obstacleBottom, obs[i].x, obs[i].y + spaceBetween);
 
+        obs[i].x--;
+
+        if(obs[i].x == 125){
+            obs.push({
+                x: canvas.width,
+                y: Math.floor(Math.random() * obstacleTop.height) - obstacleTop.height
+            });
+        };
+
+        if(bX + bird.width >= obs[i].x && bX <= obs[i].x + obstacleTop.width && (bY <= obs[i].y + obstacleTop.height || bY + bird.height >= obs[i].y + spaceBetween) 
+                || bY + bird.height >= canvas.height - ground.height){
+            if(bY + bird.height >= canvas.height - ground.height) {
+                context.drawImage(bird, bX, 375);
+            }
+            
+            if(!alert("Pontuação: " + score + "\nClique para jogar novamente.")){
+                obs.length = 0;
+                window.location.reload();
+            };
+        }
+
+        if(obs[i].x == 5){
+            score++;
+        };
+    };
+
+    context.drawImage(ground, 0, canvas.height - ground.height);
+
+    context.drawImage(bird, bX, bY);
+    bY += gravity;
+    
+    context.fillStyle
+    context.font = "20px Verdana";
+    context.fillText("Pontuação: " + score, 10, canvas.height-20);
+
+    requestAnimationFrame(drawSprites);
 }
 
-animate();
- 
+drawSprites();
